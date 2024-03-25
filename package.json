@@ -10,10 +10,13 @@
     "server": "nodemon backend/server.js",
     "start:backend": "npm run server",
     "start:frontend": "npm run dev",
-    "start:both": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+    "docker:start": "docker-compose -f backend/docker-compose.yaml up -d",
+    "docker:stop": "docker-compose -f backend/docker-compose.yaml down",
+    "start:all": "npm run docker:start && sleep 10 && concurrently \"npm run start:backend\" \"npm run start:frontend\""
   },
   "dependencies": {
     "express": "^4.19.1",
+    "pg": "^8.11.3",
     "pinia": "^2.1.7",
     "vue": "^3.4.21"
   },
