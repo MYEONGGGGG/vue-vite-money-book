@@ -12,15 +12,15 @@ services:
       POSTGRES_PASSWORD: cmepwd
       POSTGRES_DB: cmedb
     ports:
-      - "9966:9966"
+      - "5432:5432" # 포트 수정: 호스트 포트와 컨테이너 포트를 맞춰준다.
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - database-network
+      - backend-network # 백엔드 서비스와 동일한 네트워크에 속하도록 설정한다.
 
 
 networks:
-  database-network:
+  backend-network: # 백엔드 서비스와 동일한 네트워크를 정의한다.
 
 volumes:
   pgdata:
