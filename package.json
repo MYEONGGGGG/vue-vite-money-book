@@ -15,7 +15,17 @@
     "start:all": "npm run docker:start && concurrently \"npm run start:backend\" \"npm run start:frontend\""
   },
   "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.1",
+    "express-validator": "^7.0.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "pg": "^8.11.3",
     "pinia": "^2.1.7",
     "vue": "^3.4.21"

@@ -1,5 +1,8 @@
 import express from 'express';
 import pg from 'pg';
+import { Error } from './lib/lib.js';
+import httpError from 'http-errors';
+
 const { Pool } = pg;
 
 const app = express();
@@ -15,9 +18,13 @@ const pool = new Pool({
     port: 5432, // Docker Compose에서 PostgreSQL 컨테이너의 포트
 });
 
-// 미들웨어 추가
+// 미들웨어 등록
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// lib/lib.js 에서 생성해둔 Error 함수를 사용
+app.use(Error);
+
 
 // 테이블 생성 및 데이터 삽입
 (async () => {
@@ -62,6 +69,7 @@ app.use(express.urlencoded({ extended: true }));
     }
 })();
 
+
 // 라우트 정의
 app.get('/', async (req, res) => {
     try {
@@ -87,6 +95,17 @@ app.get('/', async (req, res) => {
         res.status(500).send('Error connecting to PostgreSQL');
     }
 });
+
+// Error 핸들러 생성: Express 내부에서 발생하는 404 에러 처리
+// 요청을 잘못 된 경로로 시도 할 때 내부 404에러를 형식에 맞춰 처리한다.
+app.use(() => {
+    // 라이브러리 이용
+    throw httpError(404)
+});
+// app.use((req, res, next) => {
+// 404 오류 페이지 렌더링 라우트 정의
+//     res.status(404).send('죄송합니다. 요청하신 페이지를 찾을 수 없습니다.');
+// });
 
 // 서버 시작
 app.listen(PORT, () => {
