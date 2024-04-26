@@ -1,5 +1,5 @@
 import express from 'express';
-
+import sequelize from "./models/index.js";
 import { createUserTable, getUsers } from "./models/user.js";
 
 import { Error } from './lib/lib.js';
@@ -8,11 +8,18 @@ import httpError from 'http-errors';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// PostgreSQL 연결 및 사용자 테이블 생성
+// database
 (async () => {
     try {
-        // 사용자 테이블 생성 및 데이터 삽입
-        await createUserTable();
+        console.log('CHECK: DB 연결을 시도합니다.');
+
+        // DB 연결 확인
+        await sequelize.authenticate();
+        console.log('SUCCESS: DB 연결 상태가 정상입니다.');
+
+        // 모델과 DB 동기화 완료
+        await sequelize.sync();
+
         console.log('SUCCESS: PostgreSQL 연결 및 사용자 테이블 생성이 완료되었습니다.');
     } catch (err) {
         console.log('ERROR: PostgreSQL 연결 및 사용자 테이블 생성 중 오류가 발생하였습니다.');
